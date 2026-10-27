@@ -13,8 +13,7 @@ class CategoryBloc  extends Bloc<CategoryEvent,CategoryState>{
     on<FetchCategoryEvent>((event,emit) async {
       emit(CategoryLoadingState());
       try{
-        dynamic data = await apiHelpers.getApi(url: AppUrls.URL_GET_ORDERS);
-
+        dynamic data = await apiHelpers.getApi(url: AppUrls.URL_CATEGORIES);
         if(data['status']){
           List<CategoryModel> allCategory = (data['data'] as List).map((item) => CategoryModel.fromJson(item)).toList();
           emit(CategoryLoadedState(allCategory: allCategory));
