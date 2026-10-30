@@ -15,4 +15,5 @@ class RegisterUserEvent extends UserEvent{
 });
 }
 
+
 class FetchUserDetails extends UserEvent{}

@@ -1,6 +1,9 @@
+import 'package:ecommerce/domain/constants/app_constants.dart';
+import 'package:ecommerce/domain/constants/app_routes.dart';
 import 'package:ecommerce/ui/on_boarding/bloc/user_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../on_boarding/bloc/user_bloc.dart';
 import '../../on_boarding/bloc/user_state.dart';
@@ -22,10 +25,6 @@ class _NavProfilePageState extends State<NavProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-        centerTitle: true,
-      ),
       body: BlocBuilder<UserBloc, UserState>(
         builder: (context, state) {
           if (state is UserLoadingState) {
@@ -41,6 +40,7 @@ class _NavProfilePageState extends State<NavProfilePage> {
               padding: const EdgeInsets.all(16.0),
               child: Center(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 20),
                     const CircleAvatar(
@@ -89,6 +89,25 @@ class _NavProfilePageState extends State<NavProfilePage> {
                         ],
                       ),
                     ),
+                    const SizedBox(height: 40,),
+                    ElevatedButton(
+                      onPressed: () async {
+                        SharedPreferences pref = await SharedPreferences.getInstance();
+                        await pref.remove(AppConstants.PREF_TOKEN_KEY);
+                        if (context.mounted) {
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            AppRoutes.PAGE_LOGIN,
+                            (route) => false,
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white,
+                      ),
+                      child: const Text("Log Out"),
+                    )
                   ],
                 ),
               ),
